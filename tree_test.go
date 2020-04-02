@@ -12,6 +12,7 @@ var (
 		"www.google.com": 2,
 		".google.com":    3,
 		".osnews.com":    4,
+		"cnn.com":        5,
 	}
 
 	tree = NewTreeFromMap(Map(m))
@@ -29,6 +30,8 @@ func TestBestMatch(t *testing.T) {
 	check("google.com", 1)
 	check("osnews.com", 4)
 	check("www.osnews.com", 4)
+	check("cnn.com", 5)
+	check("sub.cnn.com", nil)
 	check("google.com.cn", nil)
 }
 

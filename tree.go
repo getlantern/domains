@@ -31,13 +31,17 @@ func NewTreeFromMap(initial Map) *Tree {
 func (tree *Tree) BestMatch(domain string) (result interface{}, found bool) {
 	rd := reversed(domain)
 	// check exact match first
-	_, result, found = tree.t.LongestPrefix(rd)
+	result, found = tree.Get(domain)
 	if found {
 		return result, found
 	}
 
 	// then check wildcard match
-	_, result, found = tree.t.LongestPrefix(rd + ".")
+	matchedOn, result, found := tree.t.LongestPrefix(rd + ".")
+	if found && matchedOn[len(matchedOn)-1] != '.' {
+		result = nil
+		found = false
+	}
 	return result, found
 }
 
@@ -70,20 +74,9 @@ func (tree *Tree) ToMap() Map {
 }
 
 func reversed(input string) string {
-	n := 0
-	runes := make([]rune, len(input)+1)
-	// Add a dot prefix to make sure we're only operating on subdomains
-	runes[0] = '.'
-	runes = runes[1:]
-	for _, r := range input {
-		runes[n] = r
-		n++
+	runes := []rune(input)
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
 	}
-	runes = runes[0:n]
-	// Reverse
-	for i := 0; i < n/2; i++ {
-		runes[i], runes[n-1-i] = runes[n-1-i], runes[i]
-	}
-	// Convert back to UTF-8.
 	return string(runes)
 }
