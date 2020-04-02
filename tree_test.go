@@ -32,6 +32,7 @@ func TestBestMatch(t *testing.T) {
 	check("www.osnews.com", 4)
 	check("cnn.com", 5)
 	check("sub.cnn.com", nil)
+	check("e.com", nil)
 	check("google.com.cn", nil)
 }
 
