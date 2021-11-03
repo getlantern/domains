@@ -13,6 +13,9 @@ var (
 		".google.com":    3,
 		".osnews.com":    4,
 		"cnn.com":        5,
+		// This ensures we have the ability to handle all traffic from a given
+		// tld in a certain way.
+		".ir": 5,
 	}
 
 	tree = NewTreeFromMap(Map(m))
@@ -24,6 +27,7 @@ func TestBestMatch(t *testing.T) {
 		assert.Equal(t, expected, result)
 	}
 
+	check("random.ir", 5)
 	check("www.google.com", 2)
 	check("www2.google.com", 3)
 	check("sub.www2.google.com", 3)
